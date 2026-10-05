@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>netsound — Sonificação da rede</title>
+<link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+<header>
+  <div class="titulo">
+    <h1>🎧 netsound <span>Sonificação da rede</span></h1>
+    <div class="sub">Monitoramento passivo e somente leitura · tudo fica nesta máquina (127.0.0.1)</div>
+  </div>
+  <div class="status"><span id="selo-modo" class="selo">…</span> <span id="selo-conexao" class="selo">conectando…</span></div>
+</header>
+
+<section class="painel controles">
+  <button id="btn-iniciar" class="grande">▶ Iniciar áudio</button>
+  <label>Volume
+    <input id="volume" type="range" min="0" max="1" step="0.01" value="0.6" aria-label="Volume">
+    <output id="volume-txt">60%</output>
+  </label>
+  <label>Reverb
+    <input id="reverb" type="range" min="0" max="1" step="0.01" value="1" aria-label="Quantidade de reverb e eco">
+  </label>
+  <button id="btn-gravar" disabled title="Inicie o áudio para poder gravar">⏺ Gravar sessão (.wav)</button>
+  <span id="gravando" class="oculto">● gravando <b id="gravando-tempo">0:00</b></span>
+  <span id="aviso-audio" class="aviso">Os navegadores só liberam o som depois de um clique: pressione “Iniciar áudio”.</span>
+</section>
+
+<main>
+  <section class="painel largo">
+    <h2>Taxas de rede (últimos 60 s) <small>escala logarítmica · <span class="leg-in">■ entrada (esquerda)</span> · <span class="leg-out">■ saída (direita)</span></small></h2>
+    <canvas id="grafico" width="900" height="220"></canvas>
+    <div class="medidores">
+      <div><span class="rot">↓ Entrada</span> <b id="m-in">0 B/s</b> <small id="m-in-pps"></small> <small>nota <b id="n-in">–</b></small></div>
+      <div><span class="rot">↑ Saída</span> <b id="m-out">0 B/s</b> <small id="m-out-pps"></small> <small>nota <b id="n-out">–</b></small></div>
+      <div><span class="rot">Conexões</span> <b id="m-con">0</b> <small id="m-rem"></small></div>
+      <div><span class="rot">Dispositivos</span> <b id="m-viz">0</b></div>
+    </div>
+  </section>
+
+  <section class="painel">
+    <h2>Protocolos / portas <small>cada um é um instrumento</small></h2>
+    <div id="classes"></div>
+  </section>
+
+  <section class="painel">
+    <h2>Dispositivos na LAN <small>cada um é uma voz aguda</small></h2>
+    <div id="dispositivos" class="chips"><span class="vazio">nenhum vizinho visto ainda</span></div>
+  </section>
+
+  <section class="painel">
+    <h2>Espectro do som</h2>
+    <canvas id="espectro" width="440" height="120"></canvas>
+  </section>
+
+  <section class="painel">
+    <h2>Eventos</h2>
+    <ul id="log"></ul>
+  </section>
+</main>
+
+<footer>
+  Privacidade: nada sai desta máquina; o servidor escuta só em 127.0.0.1; o programa apenas lê contadores do sistema
+  (/proc, <code>ss</code>, <code>ip neigh</code>) — não captura pacotes nem conteúdo. · <a href="/api/estado" target="_blank" rel="noopener">estado (JSON)</a>
+</footer>
+<script src="/app.js"></script>
+</body>
+</html>
